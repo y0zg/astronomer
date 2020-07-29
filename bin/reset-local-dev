@@ -43,6 +43,11 @@ shift $((OPTIND - 1))
 # The path to the working directory - the root of the repo
 REPO_DIR="$(git rev-parse --show-toplevel)"
 
+if [[ "${OSTYPE}" =~ ^darwin ]] ; then
+  echo "Setting 'KIND_EXPERIMENTAL_DOCKER_NETWORK=bridge' since we are using macOS"
+  export KIND_EXPERIMENTAL_DOCKER_NETWORK=bridge
+fi
+
 if [[ -z "${USE_HA+x}" ]]; then
   CONFIG_FILE="$REPO_DIR/configs/local-dev.yaml"
   echo "Using non-HA config file ${CONFIG_FILE##*/}"
@@ -65,11 +70,6 @@ helm install -f "$CONFIG_FILE" \
 
 echo '
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
- Please run the following command to configure kubectl:
-
-     export KUBECONFIG="$(kind get kubeconfig-path --name=kind)"
-
 
  Astronomer is launching. You can check the status with:
 
