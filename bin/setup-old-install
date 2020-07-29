@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -o pipefail
+
+export helm_version=2.16.9
+export astronomer_version=0.10.3
+export target_dir="${HOME}/bin/"
+export kube_version="1.15.11"
+export repo_dir="$(git rev-parse --show-toplevel)"
+
+usage() {
+  echo "
+Description:
+  Set up a kind cluster running Astronomer ${astronomer_version} installed by helm2.
+
+Usage:
+  ${0##*/} [OPTIONS]
+
+Options:
+  -A    Astronomer version
+  -h    Print this help text
+  -H    Helm version to use (Default: ${helm_version})
+  -K    Kubernetes version to use (Default ${kube_version})
+  -T    Target directory for helm binaries (Default ${target_dir})
+  -x    set -o xtrace
+"
+}
+
+while getopts ':hH:T:x' option ; do
+  case "${option}" in
+    h) usage ; exit 0 ;;
+    H) helm_version="${OPTARG/v/}" ; echo "Using helm_version=${helm_version}" ;;
+    T) target_dir="${OPTARG}" ; echo "Using target_dir=${target_dir}" ;;
+    x) set -x ;;
+    *) echo "ERROR: Unknown option: -${OPTARG}" ; usage ; exit 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+case "${HOSTTYPE}" in
+  x86_64) arch=amd64 ;;
+  *) echo "ERROR: Unknown architecture" ; exit 1 ;;
+esac
+
+case "$OSTYPE" in
+  darwin*) platform=darwin ;;
+  linux*) platform=linux ;;
+  *) echo "ABORT: Unknown platform $OSTYPE." ; exit 1 ;;
+esac
+
+get_helm_version() {
+  version="$1"
+  echo "Downloading helm version ${version}"
+  [ -f "${target_dir}/helm-${version}" ] && { echo "Skipping: helm-${version} already exists" ; return ; }
+  cd "$(mktemp -d)"
+  base_filename="helm-v${version}-${platform}-${arch}"
+  wget -q "https://get.helm.sh/${base_filename}.tar.gz"
+  wget -q "https://get.helm.sh/${base_filename}.tar.gz.sha256"
+  sha256=$(sha256sum "${base_filename}.tar.gz" | cut -d ' ' -f 1)
+  grep -q "${sha256}" "${base_filename}.tar.gz.sha256" || { echo "ERROR sha256sum failed for ${base_filename}.tar.gz" ; return ; }
+  tar xf "${base_filename}.tar.gz"
+  mv -n ${platform}-${arch}/helm "${target_dir}/helm-${version}"
+  [ -f "${target_dir}/helm-${version}" ] && echo "${target_dir}/helm-${version} Successfully downloaded" ;
+}
+
+if ! [ -e "${target_dir}" ] ; then
+  mkdir "${target_dir}"
+elif ! [ -d "${target_dir}" ] ; then
+  echo "ABORT: target_dir '${target_dir}' exists but is not a directory"
+  exit 1
+fi
+
+get_helm_version "${helm_version}"
+
+kind delete cluster
+
+kind create cluster --image "kindest/node:${kube_version}"
+
+${repo_dir}/bin/generate_ssl_keys
+
+echo "Install requirements"
+cd "$repo_dir/charts/postgresql"
+helm dependency update .
+cd "$repo_dir"
+
+echo "Creating namespace 'astronomer'"
+kubectl create namespace astronomer
+
+echo "Installing TLS cert and private key"
+kubectl create secret tls astronomer-tls \
+  --key /tmp/privkey.pem \
+  --cert /tmp/fullchain.pem \
+  --namespace astronomer
