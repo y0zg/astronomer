@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
+# Description: Sets up a kind cluster with astronomer namespace and postgres DB, and
+# places ssl keys into /tmp/fullchain.pem and /tmp/privkey.pem
+
 set -euo pipefail
 
 export KUBE_VERSION="${KUBE_VERSION:-v1.15.11}"
