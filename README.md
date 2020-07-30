@@ -8,6 +8,7 @@ Astronomer is a commercial "Airflow as a Service" platform that runs on Kubernet
 
 ![Astronomer Architecture](https://assets2.astronomer.io/main/enterpriseArchitecture.svg "Astronomer Architecture")
 
+
 ## Docker images
 
 Docker images for deploying and running Astronomer are currently available on
