@@ -1,0 +1,9 @@
+---
+suite: Test metrics-svc
+templates:
+  - metrics-svc.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: Service

@@ -1,11 +1,14 @@
 suite: Test commander-deployment
 templates:
-- commander/commander-deployment.yaml
+  - commander/commander-deployment.yaml
 tests:
-- it: should work
-  asserts:
-    - isKind:
-        of: Deployment
-    - equal:
-        path: spec.template.spec.containers[0].image
-        value: astronomerinc/ap-commander:0.18.0
+  - it: Is a Deployment
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: Uses the astronomerinc/ap-commander image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: "^astronomerinc/ap-commander:"

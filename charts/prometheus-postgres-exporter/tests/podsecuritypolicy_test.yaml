@@ -1,0 +1,9 @@
+---
+suite: Test podsecuritypolicy
+templates:
+  - podsecuritypolicy.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: PodSecurityPolicy

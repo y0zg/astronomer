@@ -1,0 +1,9 @@
+---
+suite: Test svc-headless
+templates:
+  - svc-headless.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: Service

@@ -1,0 +1,9 @@
+---
+suite: Test statefulset-slaves
+templates:
+  - statefulset-slaves.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: StatefulSet

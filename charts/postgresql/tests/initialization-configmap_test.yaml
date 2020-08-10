@@ -1,0 +1,9 @@
+---
+suite: Test initialization-configmap
+templates:
+  - initialization-configmap.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: ConfigMap

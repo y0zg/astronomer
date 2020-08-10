@@ -1,0 +1,9 @@
+---
+suite: Test pod-disruption-budget
+templates:
+  - pod-disruption-budget.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget

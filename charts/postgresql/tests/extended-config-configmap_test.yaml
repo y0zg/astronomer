@@ -1,0 +1,9 @@
+---
+suite: Test extended-config-configmap
+templates:
+  - extended-config-configmap.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: ConfigMap

@@ -1,0 +1,9 @@
+---
+suite: Test servicemonitor
+templates:
+  - servicemonitor.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: ServiceMonitor

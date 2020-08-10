@@ -1,0 +1,9 @@
+---
+suite: Test role
+templates:
+  - role.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: Role

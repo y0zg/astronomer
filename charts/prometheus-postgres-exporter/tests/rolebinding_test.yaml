@@ -1,0 +1,9 @@
+---
+suite: Test rolebinding
+templates:
+  - rolebinding.yaml
+tests:
+  - it: should work
+    asserts:
+      - isKind:
+          of: RoleBinding
