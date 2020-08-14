@@ -1,0 +1,8 @@
+suite: Test tests/psp/permissive-psp.yaml
+templates:
+- tests/psp/permissive-psp.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

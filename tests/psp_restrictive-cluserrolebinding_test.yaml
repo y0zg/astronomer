@@ -1,0 +1,8 @@
+suite: Test tests/psp/restrictive-cluserrolebinding.yaml
+templates:
+- tests/psp/restrictive-cluserrolebinding.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

@@ -1,0 +1,8 @@
+suite: Test data/es-data-service.yaml
+templates:
+- data/es-data-service.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

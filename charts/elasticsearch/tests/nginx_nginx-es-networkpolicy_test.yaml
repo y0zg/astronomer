@@ -1,0 +1,8 @@
+suite: Test nginx/nginx-es-networkpolicy.yaml
+templates:
+- nginx/nginx-es-networkpolicy.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

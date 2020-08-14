@@ -1,0 +1,8 @@
+suite: Test exporter/es-exporter-service.yaml
+templates:
+- exporter/es-exporter-service.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

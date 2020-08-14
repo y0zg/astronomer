@@ -1,0 +1,8 @@
+suite: Test data/es-data-pod-disruption-budget.yaml
+templates:
+- data/es-data-pod-disruption-budget.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

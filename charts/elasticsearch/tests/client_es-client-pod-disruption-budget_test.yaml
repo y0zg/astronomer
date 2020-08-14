@@ -1,0 +1,8 @@
+suite: Test client/es-client-pod-disruption-budget.yaml
+templates:
+- client/es-client-pod-disruption-budget.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

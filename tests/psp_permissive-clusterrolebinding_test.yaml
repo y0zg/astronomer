@@ -1,0 +1,8 @@
+suite: Test tests/psp/permissive-clusterrolebinding.yaml
+templates:
+- tests/psp/permissive-clusterrolebinding.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

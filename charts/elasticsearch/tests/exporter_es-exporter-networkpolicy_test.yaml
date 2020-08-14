@@ -1,0 +1,8 @@
+suite: Test exporter/es-exporter-networkpolicy.yaml
+templates:
+- exporter/es-exporter-networkpolicy.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

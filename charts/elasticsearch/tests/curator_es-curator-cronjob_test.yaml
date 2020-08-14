@@ -1,0 +1,8 @@
+suite: Test curator/es-curator-cronjob.yaml
+templates:
+- curator/es-curator-cronjob.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

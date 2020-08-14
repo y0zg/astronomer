@@ -1,0 +1,8 @@
+suite: Test curator/es-curator-configmap.yaml
+templates:
+- curator/es-curator-configmap.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

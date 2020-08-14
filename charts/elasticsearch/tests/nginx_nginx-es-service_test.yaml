@@ -1,0 +1,8 @@
+suite: Test nginx/nginx-es-service.yaml
+templates:
+- nginx/nginx-es-service.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

@@ -1,0 +1,8 @@
+suite: Test client/es-client-networkpolicy.yaml
+templates:
+- client/es-client-networkpolicy.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

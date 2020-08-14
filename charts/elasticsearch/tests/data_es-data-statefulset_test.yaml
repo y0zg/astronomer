@@ -1,0 +1,8 @@
+suite: Test data/es-data-statefulset.yaml
+templates:
+- data/es-data-statefulset.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

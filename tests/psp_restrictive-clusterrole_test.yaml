@@ -1,0 +1,8 @@
+suite: Test tests/psp/restrictive-clusterrole.yaml
+templates:
+- tests/psp/restrictive-clusterrole.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

@@ -1,0 +1,8 @@
+suite: Test data/es-data-networkpolicy.yaml
+templates:
+- data/es-data-networkpolicy.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny

@@ -1,0 +1,8 @@
+suite: Test nginx/nginx-es-configmap.yaml
+templates:
+- nginx/nginx-es-configmap.yaml
+tests:
+- it: should work
+  asserts:
+    - isKind:
+        of: FluffyBunny
