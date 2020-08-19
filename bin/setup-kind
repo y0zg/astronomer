@@ -49,19 +49,22 @@ create_kind_cluster() {
   kind create cluster "${KIND_OPTIONS[@]}"
 }
 set +e
+KIND_CREATE_ITERATIONS_MAX="${KIND_CREATE_ITERATIONS_MAX:-2}"
+echo "Using KIND_CREATE_ITERATIONS_MAX=${KIND_CREATE_ITERATIONS_MAX}"
+KIND_CREATE_ITERATIONS=1
 # I have found kind create cluster
 # fails rarely, but since we are running
 # so many in parallel, that it happens
 # enough to justify a retry
-if ! create_kind_cluster ; then
-  set -e
-  echo "Failed to create Kind cluster, trying one more time"
-  kind delete cluster || true
+while [[ "${KIND_CREATE_ITERATIONS}" -le "${KIND_CREATE_ITERATIONS_MAX}" ]] ; do
   create_kind_cluster
-fi
-set -e
+  KIND_CREATE_ITERATIONS+=1
+  echo "Failed to create Kind cluster. Now trying ${KIND_CREATE_ITERATIONS}/${KIND_CREATE_ITERATIONS_MAX}"
+done
 
 set +x
+set -e
+
 if [[ -n "${CORDON_NODE+x}" ]]; then
   kubectl cordon "$CORDON_NODE"
 fi
@@ -79,7 +82,7 @@ kubectl create namespace astronomer
 (
   cd "${REPO_DIR}"
   mkcert -cert-file=server.pem -key-file=server.key server.example.org
-  kubectl --namespace astronomer create secret generic "private-ca" --from-file="cert.pem"="$(mkcert -CAROOT)/rootCA.pem"
+  kubectl --namespace astronomer create secret generic "private-ca" --from-file="cert.pem=$(mkcert -CAROOT)/rootCA.pem"
 )
 
 echo "Installing TLS cert and private key"

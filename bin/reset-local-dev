@@ -13,6 +13,7 @@ Usage:
 Options:
   -h    Print this help text
   -H    Use HA
+  -I    Number of iterations to attempt to successfully install kind+astronomer
   -k    List recent kubernetes versions to use with -K (not all will be available to KIND)
   -K    Kubernetes version to use (eg: 1.15.11) https://github.com/kubernetes/kubernetes/releases/
   -M    Enable multi-node kind cluster
@@ -28,10 +29,11 @@ get_kube_versions() {
     sort
 }
 
-while getopts ':hHkK:x' option ; do
+while getopts ':hHI:kK:x' option ; do
   case "${option}" in
     h) usage ; exit 0 ;;
     H) USE_HA=1 ;;
+    I) export KIND_CREATE_ITERATIONS_MAX="${OPTARG}" ;;
     k) get_kube_versions ; exit 0 ;;
     K) export KUBE_VERSION="${OPTARG/v/}" ;;
     x) set -x ;;
